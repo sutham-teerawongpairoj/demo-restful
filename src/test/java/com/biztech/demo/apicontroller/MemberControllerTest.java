@@ -104,7 +104,7 @@ public class MemberControllerTest {
         responseObject.setResponseDesc("SUCCESS");
         responseObject.setResponseBody(memModel);
 
-        when(memberController.updateMember(any(RequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.CREATED));
+        when(memberController.updateMember(any(RequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.OK));
 
         mvc.perform(put("/api/update")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -134,7 +134,7 @@ public class MemberControllerTest {
         responseObject.setResponseCode("0000I");
         responseObject.setResponseDesc("SUCCESS");
 
-        when(memberController.deleteMember(any(RequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.CREATED));
+        when(memberController.deleteMember(any(RequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.OK));
 
         mvc.perform(delete("/api/delete")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -181,7 +181,7 @@ public class MemberControllerTest {
         responseObject.setResponseDesc("SUCCESS");
         responseObject.setResponseBody(memModels);
 
-        when(memberController.findAllMember(any(RequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.CREATED));
+        when(memberController.findAllMember(any(RequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.OK));
 
         mvc.perform(post("/api/findAll").accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -239,7 +239,7 @@ public class MemberControllerTest {
         responseObject.setResponseDesc("SUCCESS");
         responseObject.setResponseBody(memModels);
 
-        when(memberController.findByNameMember(any(RequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.CREATED));
+        when(memberController.findByNameMember(any(RequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.OK));
 
         mvc.perform(post("/api/findByName").accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -297,7 +297,7 @@ public class MemberControllerTest {
         responseObject.setResponseDesc("SUCCESS");
         responseObject.setResponseBody(memModels);
 
-        when(memberController.findBySurnameMember(any(RequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.CREATED));
+        when(memberController.findBySurnameMember(any(RequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.OK));
 
         mvc.perform(post("/api/findBySurname").accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -345,7 +345,7 @@ public class MemberControllerTest {
         responseObject.setResponseDesc("SUCCESS");
         responseObject.setResponseBody(memModel);
 
-        when(memberController.findById(any(RequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.CREATED));
+        when(memberController.findById(any(RequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.OK));
 
         mvc.perform(post("/api/findById").accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
