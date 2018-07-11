@@ -62,7 +62,7 @@ public class MemberController {
             responseObject.setResponseCode("0000I");
             responseObject.setResponseDesc("SUCCESS");
             responseObject.setResponseBody(member);
-            return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
+            return new ResponseEntity<>(responseObject, HttpStatus.OK);
         } catch (BiztechException bx) {
 
             logger.error(bx.getExceptionCode()+" : "+ bx.getExceptionMessage());
@@ -111,7 +111,7 @@ public class MemberController {
             responseObject.setResponseCode("0000I");
             responseObject.setResponseDesc("SUCCESS");
             responseObject.setResponseBody(memberModel);
-            return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
+            return new ResponseEntity<>(responseObject, HttpStatus.OK);
         } catch (BiztechException bx) {
 
             logger.error(bx.getExceptionCode()+" : "+ bx.getExceptionMessage());
@@ -159,7 +159,7 @@ public class MemberController {
 
             responseObject.setResponseCode("0000I");
             responseObject.setResponseDesc("SUCCESS");
-            return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
+            return new ResponseEntity<>(responseObject, HttpStatus.OK);
         } catch (BiztechException bx) {
 
             logger.error(bx.getExceptionCode()+" : "+ bx.getExceptionMessage());
@@ -207,7 +207,7 @@ public class MemberController {
             responseObject.setResponseCode("0000I");
             responseObject.setResponseDesc("SUCCESS");
             responseObject.setResponseBody(models);
-            return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
+            return new ResponseEntity<>(responseObject, HttpStatus.OK);
         } catch (BiztechException bx) {
 
             logger.error(bx.getExceptionCode()+" : "+ bx.getExceptionMessage());
@@ -255,7 +255,7 @@ public class MemberController {
             responseObject.setResponseCode("0000I");
             responseObject.setResponseDesc("SUCCESS");
             responseObject.setResponseBody(models);
-            return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
+            return new ResponseEntity<>(responseObject, HttpStatus.OK);
         } catch (BiztechException bx) {
 
             logger.error(bx.getExceptionCode()+" : "+ bx.getExceptionMessage());
@@ -303,7 +303,7 @@ public class MemberController {
             responseObject.setResponseCode("0000I");
             responseObject.setResponseDesc("SUCCESS");
             responseObject.setResponseBody(models);
-            return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
+            return new ResponseEntity<>(responseObject, HttpStatus.OK);
         } catch (BiztechException bx) {
 
             logger.error(bx.getExceptionCode()+" : "+ bx.getExceptionMessage());
@@ -351,7 +351,7 @@ public class MemberController {
             responseObject.setResponseCode("0000I");
             responseObject.setResponseDesc("SUCCESS");
             responseObject.setResponseBody(memberModel);
-            return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
+            return new ResponseEntity<>(responseObject, HttpStatus.OK);
         } catch (BiztechException bx) {
 
             logger.error(bx.getExceptionCode()+" : "+ bx.getExceptionMessage());
