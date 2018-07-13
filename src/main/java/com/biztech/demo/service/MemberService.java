@@ -2,7 +2,9 @@ package com.biztech.demo.service;
 
 import com.biztech.demo.model.ActivityModel;
 import com.biztech.demo.model.MemberModel;
+import com.biztech.demo.object.CreateMemberRequestObject;
 import com.biztech.demo.object.RequestObject;
+import com.biztech.demo.object.UpdateMemberRequestObject;
 import com.biztech.demo.repository.MemberRepository;
 import com.biztech.demo.util.BiztechException;
 import com.biztech.demo.util.StringUtil;
@@ -31,7 +33,7 @@ public class MemberService {
     }
 
     @Transactional(readOnly=false, rollbackFor = {BiztechException.class}, isolation = Isolation.READ_COMMITTED)
-    public MemberModel addMember(RequestObject requestObject) throws BiztechException {
+    public MemberModel addMember(CreateMemberRequestObject requestObject) throws BiztechException {
 
         logger.info("Add Member Service[Start]");
         MemberModel member;
@@ -39,8 +41,8 @@ public class MemberService {
         try {
 
             logger.info("Add Member Service[Load value to object]");
-            member = (MemberModel) StringUtil.copy(requestObject.getBody(), new MemberModel());
-            ActivityModel activityModel = (ActivityModel) StringUtil.copy(requestObject.getBody(), new ActivityModel());
+            member = (MemberModel) StringUtil.copy(requestObject, new MemberModel());
+            ActivityModel activityModel = (ActivityModel) StringUtil.copy(requestObject, new ActivityModel());
 
             logger.info("Add Member Service[member : "+ member.toString()+"]");
             logger.info("Add Member Service[activity : "+ activityModel.toString()+"]");
@@ -49,9 +51,9 @@ public class MemberService {
             activityService.addLog(activityModel);
 
             logger.info("Add Member Service[validate data]");
-            if (StringUtil.isEmpty(member.getUserId())) throw new BiztechException("1001E", "Parameter is not found [userId:"+ member.getUserId() +"]", HttpStatus.BAD_REQUEST);
-            if (StringUtil.isEmpty(member.getName())) throw new BiztechException("1001E", "Parameter is not found [name:"+ member.getName() +"]", HttpStatus.BAD_REQUEST);
-            if (StringUtil.isEmpty(member.getSurname())) throw new BiztechException("1001E", "Parameter is not found [surname:"+ member.getSurname() +"]", HttpStatus.BAD_REQUEST);
+            if (StringUtil.isEmpty(member.getUserId())) throw new BiztechException("1001E", "Parameter is not found [userId:"+ member.getUserId() +"]");
+            if (StringUtil.isEmpty(member.getName())) throw new BiztechException("1001E", "Parameter is not found [name:"+ member.getName() +"]");
+            if (StringUtil.isEmpty(member.getSurname())) throw new BiztechException("1001E", "Parameter is not found [surname:"+ member.getSurname() +"]");
 
             member.setCreatedDate(new Date());
             memberRepository.save(member);
@@ -59,7 +61,7 @@ public class MemberService {
         } catch (BiztechException be) {
             throw be;
         } catch (Exception e) {
-            BiztechException be = new BiztechException("9999E", "Other Error Exception "+ e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            BiztechException be = new BiztechException("9999E", "Other Error Exception "+ e.getMessage());
             be.setStackTrace(e.getStackTrace());
             throw be;
         }
@@ -68,7 +70,7 @@ public class MemberService {
     }
 
     @Transactional(readOnly=false, rollbackFor = {BiztechException.class}, isolation = Isolation.READ_COMMITTED)
-    public MemberModel updateMember(RequestObject requestObject) throws BiztechException {
+    public MemberModel updateMember(UpdateMemberRequestObject requestObject) throws BiztechException {
 
         logger.info("Update Member Service[Start]");
         MemberModel member;
@@ -86,10 +88,10 @@ public class MemberService {
             activityService.addLog(activityModel);
 
             logger.info("Update Member Service[validate data]");
-            if (member.getId()==0) throw new BiztechException("1001E", "Parameter is not found [id:"+ member.getId() +"]", HttpStatus.BAD_REQUEST);
-            if (StringUtil.isEmpty(member.getUserId())) throw new BiztechException("1001E", "Parameter is not found [userId:"+ member.getUserId() +"]", HttpStatus.BAD_REQUEST);
-            if (StringUtil.isEmpty(member.getName())) throw new BiztechException("1001E", "Parameter is not found [name:"+ member.getName() +"]", HttpStatus.BAD_REQUEST);
-            if (StringUtil.isEmpty(member.getSurname())) throw new BiztechException("1001E", "Parameter is not found [surname:"+ member.getSurname() +"]", HttpStatus.BAD_REQUEST);
+            if (member.getId()==0) throw new BiztechException("1001E", "Parameter is not found [id:"+ member.getId() +"]");
+            if (StringUtil.isEmpty(member.getUserId())) throw new BiztechException("1001E", "Parameter is not found [userId:"+ member.getUserId() +"]");
+            if (StringUtil.isEmpty(member.getName())) throw new BiztechException("1001E", "Parameter is not found [name:"+ member.getName() +"]");
+            if (StringUtil.isEmpty(member.getSurname())) throw new BiztechException("1001E", "Parameter is not found [surname:"+ member.getSurname() +"]");
 
             logger.info("Update Member Service[validate id with db]");
             if (memberRepository.existsById(member.getId())) {
@@ -97,13 +99,13 @@ public class MemberService {
                 memberRepository.save(member);
                 memberRepository.flush();
             } else {
-                throw new BiztechException("2001E", "Data is not exist from db [id:"+ member.getId() +"]", HttpStatus.BAD_REQUEST);
+                throw new BiztechException("2001E", "Data is not exist from db [id:"+ member.getId() +"]");
             }
         } catch (BiztechException be) {
             throw be;
         } catch (Exception e) {
             memberRepository.flush();
-            BiztechException be = new BiztechException("9999E", "Other Error Exception "+ e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            BiztechException be = new BiztechException("9999E", "Other Error Exception "+ e.getMessage());
             be.setStackTrace(e.getStackTrace());
             throw be;
         }
@@ -130,19 +132,19 @@ public class MemberService {
             activityService.addLog(activityModel);
 
             logger.info("Delete Member Service[validate id]");
-            if (member.getId()==0) throw new BiztechException("1001E", "Parameter is not found [id:"+ member.getId() +"]", HttpStatus.BAD_REQUEST);
+            if (member.getId()==0) throw new BiztechException("1001E", "Parameter is not found [id:"+ member.getId() +"]");
 
             logger.info("Delete Member Service[validate id with db]");
             if (memberRepository.existsById(member.getId())) {
                 memberRepository.delete(member);
                 memberRepository.flush();
             } else {
-                throw new BiztechException("2001E", "Data is not exist from db [id:"+ member.getId() +"]", HttpStatus.BAD_REQUEST);
+                throw new BiztechException("2001E", "Data is not exist from db [id:"+ member.getId() +"]");
             }
         } catch (BiztechException be) {
             throw be;
         } catch (Exception e) {
-            BiztechException be = new BiztechException("9999E", "Other Error Exception "+ e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            BiztechException be = new BiztechException("9999E", "Other Error Exception "+ e.getMessage());
             be.setStackTrace(e.getStackTrace());
             throw be;
         }
@@ -168,7 +170,7 @@ public class MemberService {
         } catch (BiztechException be) {
             throw be;
         } catch (Exception e) {
-            BiztechException be = new BiztechException("9999E", "Other Error Exception "+ e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            BiztechException be = new BiztechException("9999E", "Other Error Exception "+ e.getMessage());
             be.setStackTrace(e.getStackTrace());
             throw be;
         }
@@ -197,7 +199,7 @@ public class MemberService {
         } catch (BiztechException be) {
             throw be;
         } catch (Exception e) {
-            BiztechException be = new BiztechException("9999E", "Other Error Exception "+ e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            BiztechException be = new BiztechException("9999E", "Other Error Exception "+ e.getMessage());
             be.setStackTrace(e.getStackTrace());
             throw be;
         }
@@ -227,7 +229,7 @@ public class MemberService {
 
             throw be;
         } catch (Exception e) {
-            BiztechException be = new BiztechException("9999E", "Other Error Exception "+ e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            BiztechException be = new BiztechException("9999E", "Other Error Exception "+ e.getMessage());
             be.setStackTrace(e.getStackTrace());
             throw be;
         }
@@ -256,12 +258,12 @@ public class MemberService {
             if (memberRepository.existsById(model.getId())) {
                 model = memberRepository.findById(model.getId()).get();
             } else {
-                throw new BiztechException("2001E", "Data is not exist from db [id:"+ model.getId() +"]", HttpStatus.BAD_REQUEST);
+                throw new BiztechException("2001E", "Data is not exist from db [id:"+ model.getId() +"]");
             }
         } catch (BiztechException be) {
             throw be;
         } catch (Exception e) {
-            BiztechException be = new BiztechException("9999E", "Other Error Exception "+ e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            BiztechException be = new BiztechException("9999E", "Other Error Exception "+ e.getMessage());
             be.setStackTrace(e.getStackTrace());
             throw be;
         }

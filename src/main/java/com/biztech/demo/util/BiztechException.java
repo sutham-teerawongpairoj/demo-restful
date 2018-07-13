@@ -11,16 +11,29 @@ public class BiztechException extends RuntimeException {
 
     public BiztechException(){}
 
-    public BiztechException(String exceptionCode, String exceptionMessage, HttpStatus httpStatus) {
+//    public BiztechException(String exceptionCode, String exceptionMessage, HttpStatus httpStatus) {
+//        this.exceptionCode = exceptionCode;
+//        this.exceptionMessage = exceptionMessage;
+//        this.httpStatus = httpStatus;
+//    }
+//
+//    public BiztechException(String exceptionCode, String exceptionMessage, HttpStatus httpStatus, Throwable cause) {
+//        this.exceptionCode = exceptionCode;
+//        this.exceptionMessage = exceptionMessage;
+//        this.httpStatus = httpStatus;
+//        this.cause = cause;
+//    }
+
+    public BiztechException(String exceptionCode, String exceptionMessage) {
         this.exceptionCode = exceptionCode;
         this.exceptionMessage = exceptionMessage;
-        this.httpStatus = httpStatus;
+        this.httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
-    public BiztechException(String exceptionCode, String exceptionMessage, HttpStatus httpStatus, Throwable cause) {
+    public BiztechException(String exceptionCode, String exceptionMessage, Throwable cause) {
         this.exceptionCode = exceptionCode;
         this.exceptionMessage = exceptionMessage;
-        this.httpStatus = httpStatus;
+        this.httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         this.cause = cause;
     }
 

@@ -3,7 +3,9 @@ package com.biztech.demo.service;
 import com.biztech.demo.Application;
 import com.biztech.demo.model.ActivityModel;
 import com.biztech.demo.model.MemberModel;
+import com.biztech.demo.object.CreateMemberRequestObject;
 import com.biztech.demo.object.RequestObject;
+import com.biztech.demo.object.UpdateMemberRequestObject;
 import com.biztech.demo.util.BiztechException;
 import com.biztech.demo.util.DateUtil;
 import com.biztech.demo.util.StringUtil;
@@ -51,7 +53,35 @@ public class MemberServiceTest {
     private void checkActivity(RequestObject requestObject) throws Exception {
 
         // Mapping reqeust body fto request activity
-        ActivityModel actRequest = actRequest = (ActivityModel) StringUtil.copy(requestObject.getBody(), new ActivityModel());
+        ActivityModel actRequest = (ActivityModel) StringUtil.copy(requestObject.getBody(), new ActivityModel());
+
+        // check activity
+        List<ActivityModel> acts = entityManager.createQuery("select a from ActivityModel a where a.activity = :activity")
+                .setParameter("activity", actRequest.getActivity())
+                .getResultList();
+        assertEquals(1, acts.size());
+        assertEquals(actRequest.getActivity(), acts.get(0).getActivity());
+        assertEquals(DateUtil.DateToString(new Date(), "dd/MM/yyyy", Locale.ENGLISH), DateUtil.DateToString(DateUtil.DefaultStringToDate(acts.get(0).getCreatedDate()), "dd/MM/YYYY", Locale.ENGLISH));
+    }
+
+    private void checkActivity(CreateMemberRequestObject requestObject) throws Exception {
+
+        // Mapping reqeust body fto request activity
+        ActivityModel actRequest = (ActivityModel) StringUtil.copy(requestObject, new ActivityModel());
+
+        // check activity
+        List<ActivityModel> acts = entityManager.createQuery("select a from ActivityModel a where a.activity = :activity")
+                .setParameter("activity", actRequest.getActivity())
+                .getResultList();
+        assertEquals(1, acts.size());
+        assertEquals(actRequest.getActivity(), acts.get(0).getActivity());
+        assertEquals(DateUtil.DateToString(new Date(), "dd/MM/yyyy", Locale.ENGLISH), DateUtil.DateToString(DateUtil.DefaultStringToDate(acts.get(0).getCreatedDate()), "dd/MM/YYYY", Locale.ENGLISH));
+    }
+
+    private void checkActivity(UpdateMemberRequestObject requestObject) throws Exception {
+
+        // Mapping reqeust body fto request activity
+        ActivityModel actRequest = (ActivityModel) StringUtil.copy(requestObject.getBody(), new ActivityModel());
 
         // check activity
         List<ActivityModel> acts = entityManager.createQuery("select a from ActivityModel a where a.activity = :activity")
@@ -350,11 +380,11 @@ public class MemberServiceTest {
     public void normalcase09() throws Exception {
 
         // input
-        String requestJSON = "{\"header\":{},\"body\":{\"activity\":\"unittest09\",\"userId\":\"Normal09\",\"name\":\"Name09\",\"surname\":\"Surname09\"}}";
+        String requestJSON = "{\"activity\":\"unittest09\",\"userId\":\"Normal09\",\"name\":\"Name09\",\"surname\":\"Surname09\"}";
 
         // Mapping request json to request object
-        RequestObject requestObject = gson.fromJson(requestJSON, new RequestObject().getClass());
-        logger.info("Body : "+ requestObject.getBody());
+        CreateMemberRequestObject requestObject = gson.fromJson(requestJSON, new CreateMemberRequestObject().getClass());
+        logger.info("Body : "+ requestObject.toString());
 
         MemberModel memberAdded = memberService.addMember(requestObject);
 
@@ -374,18 +404,18 @@ public class MemberServiceTest {
     public void abnormalcase10() throws Exception {
 
         // input
-        String requestJSON = "{\"header\":{},\"body\":{\"activity\":\"unittest10\",\"name\":\"Name10\",\"surname\":\"Surname10\"}}";
+        String requestJSON = "{\"activity\":\"unittest10\",\"name\":\"Name10\",\"notes\":\"string\",\"surname\":\"Surname10\"}";
 
         // Mapping request json to request object
-        RequestObject requestObject = gson.fromJson(requestJSON, new RequestObject().getClass());
-        logger.info("Body : "+ requestObject.getBody());
+        CreateMemberRequestObject requestObject = gson.fromJson(requestJSON, new CreateMemberRequestObject().getClass());
+        logger.info("Body : "+ requestObject.toString());
 
         try {
             memberService.addMember(requestObject);
         } catch (BiztechException e) {
 
             // Mapping reqeust body fto request activity
-            MemberModel modelRequest = (MemberModel) StringUtil.copy(requestObject.getBody(), new MemberModel());
+            MemberModel modelRequest = (MemberModel) StringUtil.copy(requestObject, new MemberModel());
             assertEquals("1001E", e.getExceptionCode());
             assertEquals("Parameter is not found [userId:"+ modelRequest.getUserId() +"]", e.getExceptionMessage());
         }
@@ -399,18 +429,18 @@ public class MemberServiceTest {
     public void abnormalcase11() throws Exception {
 
         // input
-        String requestJSON = "{\"header\":{},\"body\":{\"activity\":\"unittest11\",\"userId\":\"Abnormal11\",\"surname\":\"Surname11\"}}";
+        String requestJSON = "{\"activity\":\"unittest11\",\"userId\":\"Abnormal11\",\"surname\":\"Surname11\"}";
 
         // Mapping request json to request object
-        RequestObject requestObject = gson.fromJson(requestJSON, new RequestObject().getClass());
-        logger.info("Body : "+ requestObject.getBody());
+        CreateMemberRequestObject requestObject = gson.fromJson(requestJSON, new CreateMemberRequestObject().getClass());
+        logger.info("Body : "+ requestObject.toString());
 
         try {
             memberService.addMember(requestObject);
         } catch (BiztechException e) {
 
             // Mapping reqeust body fto request activity
-            MemberModel modelRequest = (MemberModel) StringUtil.copy(requestObject.getBody(), new MemberModel());
+            MemberModel modelRequest = (MemberModel) StringUtil.copy(requestObject, new MemberModel());
             assertEquals("1001E", e.getExceptionCode());
             assertEquals("Parameter is not found [name:"+ modelRequest.getName() +"]", e.getExceptionMessage());
         }
@@ -424,18 +454,18 @@ public class MemberServiceTest {
     public void abnormalcase12() throws Exception {
 
         // input
-        String requestJSON = "{\"header\":{},\"body\":{\"activity\":\"unittest12\",\"userId\":\"Abnormal12\",\"name\":\"Name12\"}}";
+        String requestJSON = "{\"activity\":\"unittest12\",\"userId\":\"Abnormal12\",\"name\":\"Name12\"}";
 
         // Mapping request json to request object
-        RequestObject requestObject = gson.fromJson(requestJSON, new RequestObject().getClass());
-        logger.info("Body : "+ requestObject.getBody());
+        CreateMemberRequestObject requestObject = gson.fromJson(requestJSON, new CreateMemberRequestObject().getClass());
+        logger.info("Body : "+ requestObject.toString());
 
         try {
             memberService.addMember(requestObject);
         } catch (BiztechException e) {
 
             // Mapping reqeust body fto request activity
-            MemberModel modelRequest = (MemberModel) StringUtil.copy(requestObject.getBody(), new MemberModel());
+            MemberModel modelRequest = (MemberModel) StringUtil.copy(requestObject, new MemberModel());
             assertEquals("1001E", e.getExceptionCode());
             assertEquals("Parameter is not found [surname:"+ modelRequest.getSurname() +"]", e.getExceptionMessage());
         }
@@ -465,10 +495,10 @@ public class MemberServiceTest {
         entityManager.flush();
 
         // input
-        String requestJSON = "{\"header\":{},\"body\":{\"activity\":\"unittest13\",\"id\":"+model13_01.getId()+",\"userId\":\"Normal13_01\",\"name\":\"Name13_01\",\"surname\":\"Surname13_01\"}}";
+        String requestJSON = "{\"body\": {\"activity\":\"unittest13\",\"id\":"+model13_01.getId()+",\"name\":\"Name13_01\",\"notes\": \"Notes13_01\",\"surname\": \"Surname13_01\",\"userId\": \"Normal13_01\"},\"header\": {\"token\": \"token13_01\",\"username\": \"username13_01\"}}";
 
         // Mapping request json to request object
-        RequestObject requestObject = gson.fromJson(requestJSON, new RequestObject().getClass());
+        UpdateMemberRequestObject requestObject = gson.fromJson(requestJSON, new UpdateMemberRequestObject().getClass());
         logger.info("Body : "+ requestObject.getBody());
 
         MemberModel memberRequest = memberService.updateMember(requestObject);
@@ -503,10 +533,9 @@ public class MemberServiceTest {
         entityManager.flush();
 
         // input
-        String requestJSON = "{\"header\":{},\"body\":{\"activity\":\"unittest14\",\"id\":0,\"userId\":\"Normal14_UP\",\"name\":\"Name14_UP\",\"surname\":\"Surname14_UP\"}}";
-
+        String requestJSON = "{\"body\": {\"activity\":\"unittest14\",\"name\":\"Name14_UP\",\"notes\": \"Notes14_UP\",\"surname\": \"Surname14_UP\",\"userId\": \"Normal14_UP\"},\"header\": {\"token\": \"token14_UP\",\"username\": \"username14_UP\"}}";
         // Mapping request json to request object
-        RequestObject requestObject = gson.fromJson(requestJSON, new RequestObject().getClass());
+        UpdateMemberRequestObject requestObject = gson.fromJson(requestJSON, new UpdateMemberRequestObject().getClass());
         logger.info("Body : "+ requestObject.getBody());
 
         try {
@@ -543,10 +572,9 @@ public class MemberServiceTest {
         entityManager.flush();
 
         // input
-        String requestJSON = "{\"header\":{},\"body\":{\"activity\":\"unittest15\",\"id\":"+model15.getId()+",\"name\":\"Name15_UP\",\"surname\":\"Surname15_UP\"}}";
-
+        String requestJSON = "{\"body\": {\"activity\":\"unittest15\",\"id\":"+model15.getId()+",\"name\":\"Name15_UP\",\"notes\": \"Notes15_UP\",\"surname\": \"Surname15_UP\"},\"header\": {\"token\": \"token15_UP\",\"username\": \"username15_UP\"}}";
         // Mapping request json to request object
-        RequestObject requestObject = gson.fromJson(requestJSON, new RequestObject().getClass());
+        UpdateMemberRequestObject requestObject = gson.fromJson(requestJSON, new UpdateMemberRequestObject().getClass());
 
         try {
 
@@ -582,10 +610,10 @@ public class MemberServiceTest {
         entityManager.flush();
 
         // input
-        String requestJSON = "{\"header\":{},\"body\":{\"activity\":\"unittest16\",\"id\":"+model16.getId()+",\"userId\":\"Abnormal16_UP\",\"surname\":\"Surname16_UP\"}}";
+        String requestJSON = "{\"body\": {\"activity\":\"unittest16\",\"id\":"+model16.getId()+",\"notes\": \"Notes16_UP\",\"surname\": \"Surname16_UP\",\"userId\": \"Normal16_UP\"},\"header\": {\"token\": \"token16_UP\",\"username\": \"username16_UP\"}}";
 
         // Mapping request json to request object
-        RequestObject requestObject = gson.fromJson(requestJSON, new RequestObject().getClass());
+        UpdateMemberRequestObject requestObject = gson.fromJson(requestJSON, new UpdateMemberRequestObject().getClass());
 
         try {
 
@@ -621,10 +649,10 @@ public class MemberServiceTest {
         entityManager.flush();
 
         // input
-        String requestJSON = "{\"header\":{},\"body\":{\"activity\":\"unittest17\",\"id\":"+model17.getId()+",\"userId\":\"Abnormal17_UP\",\"name\":\"Name17_UP\"}}";
+        String requestJSON = "{\"body\": {\"activity\":\"unittest17\",\"id\":"+model17.getId()+",\"name\":\"Name17_UP\",\"notes\": \"Notes17_UP\",\"userId\": \"Normal17_UP\"},\"header\": {\"token\": \"token17_UP\",\"username\": \"username17_UP\"}}";
 
         // Mapping request json to request object
-        RequestObject requestObject = gson.fromJson(requestJSON, new RequestObject().getClass());
+        UpdateMemberRequestObject requestObject = gson.fromJson(requestJSON, new UpdateMemberRequestObject().getClass());
 
         try {
 

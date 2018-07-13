@@ -1,10 +1,10 @@
 package com.biztech.demo.apicontroller;
 
 import com.biztech.demo.model.MemberModel;
-import com.biztech.demo.object.RequestObject;
-import com.biztech.demo.object.ResponseObject;
+import com.biztech.demo.object.*;
 import com.biztech.demo.service.MemberService;
 import com.biztech.demo.util.BiztechException;
+import com.biztech.demo.util.StringUtil;
 import io.swagger.annotations.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,36 +32,23 @@ public class MemberController {
 
     @ApiOperation(value = "Create New Member", notes = "Create New Member With Member userId, name, surname and insert activity logs by activity")
     @ApiResponses(value = {
-        @ApiResponse(code = 201, message = "Created Successful", response = ResponseObject.class, responseContainer = "{\"responseCode\":\"0000I\",\"responseDesc\":\"SUCCESS\",\"responseBody\":{\"id\":39,\"userId\":\"Normal01\",\"name\":\"Name01\",\"surname\":\"Surname01\",\"createdDate\":\"05/07/2018 16:30:49\"}}"),
-        @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseObject.class),
-        @ApiResponse(code = 400, message = "Parameter not found", response = ResponseObject.class)
-    })
-    @ApiImplicitParams({
-            @ApiImplicitParam(
-                    name = "requestObject",
-                    dataType = "RequestObject",
-                    value = "{<br>\"header\":{},<br>\"body\":{<br>\"activity\":\"createMember\",<br>\"userId\":\"Normal01\",<br>\"name\":\"Name01\",<br>\"surname\":\"Surname01\"}<br>}",
-                    examples = @io.swagger.annotations.Example(
-                            value = {
-                                    @ExampleProperty(value = "{\"header\":{},\"body\":{\"activity\":\"createMember\",\"userId\":\"Normal01\",\"name\":\"Name01\",\"surname\":\"Surname01\"}}", mediaType = "application/json")
-                            }))
+        @ApiResponse(code = 500, message = "Internal Server Error", response = CreateMemberResponseObject.class),
     })
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseObject> createMember(
-            @ApiParam(value = "{\"header\":{},\"body\":{\"activity\":\"createMember\",\"userId\":\"Normal01\",\"name\":\"Name01\",\"surname\":\"Surname01\"}}", required = true)
-            @RequestBody RequestObject requestObject) {
+    public ResponseEntity<CreateMemberResponseObject> createMember(
+            @RequestBody CreateMemberRequestObject requestObject) {
 
         logger.info("requestObject : "+ requestObject);
-        logger.info("Add New Member header : "+ requestObject.getHeader() +", body : "+ requestObject.getBody());
-        ResponseObject responseObject = new ResponseObject();
+        logger.info("Add New Member header : "+ requestObject.toString());
+        CreateMemberResponseObject responseObject = new CreateMemberResponseObject();
         try {
 
             logger.info("Insert new member");
             MemberModel member = memberService.addMember(requestObject);
 
+            responseObject = (CreateMemberResponseObject) StringUtil.copy(member, new CreateMemberResponseObject());
             responseObject.setResponseCode("0000I");
             responseObject.setResponseDesc("SUCCESS");
-            responseObject.setResponseBody(member);
             return new ResponseEntity<>(responseObject, HttpStatus.OK);
         } catch (BiztechException bx) {
 
@@ -80,37 +67,24 @@ public class MemberController {
         }
     }
 
-    @ApiOperation(value = "Update Member Data", notes = "Update Member With Member id, userId, name, surname and insert activity logs by activity", response = ResponseObject.class)
-    @ApiImplicitParams({
-            @ApiImplicitParam(
-                    name = "requestObject",
-                    dataType = "RequestObject",
-                    value = "{<br>\"header\":{},<br>\"body\":{<br>\"activity\":\"updateMember\",<br>\"id\":1,<br>\"userId\":\"UserId01_UP\",<br>\"name\":\"Name01_UP\",<br>\"surname\":\"Surname01_UP\"}<br>}",
-                    examples = @io.swagger.annotations.Example(
-                            value = {
-                                    @ExampleProperty(value = "{\"header\":{},\"body\":{\"activity\":\"updateMember\",\"id\":1,\"userId\":\"UserId01_UP\",\"name\":\"Name01_UP\",\"surname\":\"Surname01_UP\"}}", mediaType = "application/json")
-                            }))
-    })
+    @ApiOperation(value = "Update Member Data", notes = "Update Member With Member id, userId, name, surname and insert activity logs by activity", response = UpdateMemberResponseObject.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Created Successful", response = ResponseObject.class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseObject.class),
-            @ApiResponse(code = 400, message = "Parameter not found", response = ResponseObject.class)
+            @ApiResponse(code = 500, message = "Internal Server Error", response = UpdateMemberRequestObject.class)
     })
     @RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseObject> updateMember(
-            @ApiParam(value = "{\"header\":{},\"body\":{\"activity\":\"updateMember\",\"id\":1,\"userId\":\"UserId01_UP\",\"name\":\"Name01_UP\",\"surname\":\"Surname01_UP\"}}", required = true)
-            @RequestBody RequestObject requestObject) {
+    public ResponseEntity<UpdateMemberResponseObject> updateMember(
+            @RequestBody UpdateMemberRequestObject requestObject) {
 
         logger.info("Update Member header : "+ requestObject.getHeader() +", body : "+ requestObject.getBody());
-        ResponseObject responseObject = new ResponseObject();
+        UpdateMemberResponseObject responseObject = new UpdateMemberResponseObject();
         try {
 
             logger.info("Update member");
             MemberModel memberModel = memberService.updateMember(requestObject);
 
+            responseObject.setResponseBody((UpdateMemberResponseBodyObject) StringUtil.copy(memberModel, new UpdateMemberResponseBodyObject()));
             responseObject.setResponseCode("0000I");
             responseObject.setResponseDesc("SUCCESS");
-            responseObject.setResponseBody(memberModel);
             return new ResponseEntity<>(responseObject, HttpStatus.OK);
         } catch (BiztechException bx) {
 

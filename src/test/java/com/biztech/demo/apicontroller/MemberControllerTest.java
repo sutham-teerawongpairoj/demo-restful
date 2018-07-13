@@ -2,9 +2,9 @@ package com.biztech.demo.apicontroller;
 
 import com.biztech.demo.model.ActivityModel;
 import com.biztech.demo.model.MemberModel;
-import com.biztech.demo.object.RequestObject;
-import com.biztech.demo.object.ResponseObject;
+import com.biztech.demo.object.*;
 import com.biztech.demo.util.DateUtil;
+import com.biztech.demo.util.StringUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -61,12 +61,11 @@ public class MemberControllerTest {
         memModel.setUserId("UserId01");
         memModel.setCreatedDate(DateUtil.DefaultStringToDate("01/07/2018 08:00:00"));
 
-        ResponseObject responseObject = new ResponseObject();
+        CreateMemberResponseObject responseObject = (CreateMemberResponseObject) StringUtil.copy(memModel, new CreateMemberResponseObject());
         responseObject.setResponseCode("0000I");
         responseObject.setResponseDesc("SUCCESS");
-        responseObject.setResponseBody(memModel);
 
-        when(memberController.createMember(any(RequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.CREATED));
+        when(memberController.createMember(any(CreateMemberRequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.CREATED));
 
         mvc.perform(post("/api/add")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -77,14 +76,14 @@ public class MemberControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.responseCode", is("0000I")))
                 .andExpect(jsonPath("$.responseDesc", is("SUCCESS")))
-                .andExpect(jsonPath("$.responseBody.id", is(1)))
-                .andExpect(jsonPath("$.responseBody.name", is("Name01")))
-                .andExpect(jsonPath("$.responseBody.surname", is("Surname01")))
-                .andExpect(jsonPath("$.responseBody.userId", is("UserId01")))
-                .andExpect(jsonPath("$.responseBody.createdDate", is("01/07/2018 08:00:00")))
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("Name01")))
+                .andExpect(jsonPath("$.surname", is("Surname01")))
+                .andExpect(jsonPath("$.userId", is("UserId01")))
+                .andExpect(jsonPath("$.createdDate", is("01/07/2018 08:00:00")))
                 ;
 
-        ArgumentCaptor<RequestObject> requestCaptor = ArgumentCaptor.forClass(RequestObject.class);
+        ArgumentCaptor<CreateMemberRequestObject> requestCaptor = ArgumentCaptor.forClass(CreateMemberRequestObject.class);
         verify(memberController, times(1)).createMember(requestCaptor.capture());
         verifyNoMoreInteractions(memberController);
     }
@@ -99,12 +98,13 @@ public class MemberControllerTest {
         memModel.setUserId("UserId01_UP");
         memModel.setCreatedDate(DateUtil.DefaultStringToDate("01/07/2018 08:00:00"));
 
-        ResponseObject responseObject = new ResponseObject();
+        UpdateMemberResponseObject responseObject = new UpdateMemberResponseObject();
+
         responseObject.setResponseCode("0000I");
         responseObject.setResponseDesc("SUCCESS");
-        responseObject.setResponseBody(memModel);
+        responseObject.setResponseBody((UpdateMemberResponseBodyObject) StringUtil.copy(memModel, new UpdateMemberResponseBodyObject()));
 
-        when(memberController.updateMember(any(RequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.OK));
+        when(memberController.updateMember(any(UpdateMemberRequestObject.class))).thenReturn(new ResponseEntity<>(responseObject, HttpStatus.OK));
 
         mvc.perform(put("/api/update")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -122,7 +122,7 @@ public class MemberControllerTest {
                 .andExpect(jsonPath("$.responseBody.createdDate", is("01/07/2018 08:00:00")))
         ;
 
-        ArgumentCaptor<RequestObject> requestCaptor = ArgumentCaptor.forClass(RequestObject.class);
+        ArgumentCaptor<UpdateMemberRequestObject> requestCaptor = ArgumentCaptor.forClass(UpdateMemberRequestObject.class);
         verify(memberController, times(1)).updateMember(requestCaptor.capture());
         verifyNoMoreInteractions(memberController);
     }
