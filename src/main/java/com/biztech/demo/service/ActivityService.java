@@ -30,7 +30,7 @@ public class ActivityService {
     public void addLog(ActivityModel model) throws  Exception {
 
         logger.info("Add activity logs");
-        if (StringUtil.isEmpty(model.getActivity())) throw new BiztechException("1001E", "Parameter is not found [Activity:"+ model.getActivity() +"]", HttpStatus.BAD_REQUEST);
+        if (StringUtil.isEmpty(model.getActivity())) throw new BiztechException("1001E", "Parameter is not found [Activity:"+ model.getActivity() +"]");
 
         try {
             model.setCreatedDate(new Date());
@@ -38,7 +38,7 @@ public class ActivityService {
             activityRepository.flush();
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BiztechException("9999E", "Other Exception", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new BiztechException("9999E", "Other Exception");
         }
     }
 }
