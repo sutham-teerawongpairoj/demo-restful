@@ -63,7 +63,7 @@ public class ActivityServiceTest {
             activityService.addLog(model);
         } catch (BiztechException e) {
             assertEquals(e.getExceptionCode(), "1001E");
-            assertEquals(e.getExceptionMessage(), "Parameter is not found [Activity:"+ model.getActivity() +"]");
+            assertEquals(e.getExceptionMessage(), "Parameter is not found [activity:"+ model.getActivity() +"]");
         }
     }
 

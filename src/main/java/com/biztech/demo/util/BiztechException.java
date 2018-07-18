@@ -26,7 +26,9 @@ public class BiztechException extends RuntimeException {
     public BiztechException(String exceptionProject, String exceptionCode, String exceptionMessage, Exception exception, String pName, String pValue) {
         this.exceptionProject = exceptionProject;
         this.exceptionCode = exceptionCode;
-        this.exceptionMessage = exceptionMessage.replaceAll(GlobalConstant.PARMATER_NOT_FOUND_P_NAME, pName).replaceAll(GlobalConstant.PARMATER_NOT_FOUND_P_VALUE, pValue);
+        this.exceptionMessage = exceptionMessage.replaceAll(GlobalConstant.PARMATER_NOT_FOUND_P_NAME, (pName==null)?"null":pName).replaceAll(GlobalConstant.PARMATER_NOT_FOUND_P_VALUE, (pValue==null)?"null":pValue);
+//        this.exceptionMessage = exceptionMessage.replace(GlobalConstant.PARMATER_NOT_FOUND_P_NAME, (pName==null)?"null":pName);
+//        this.exceptionMessage = exceptionMessage.replace(GlobalConstant.PARMATER_NOT_FOUND_P_VALUE, (pValue==null)?"null":pValue);
         this.httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         this.exception = exception;
     }
