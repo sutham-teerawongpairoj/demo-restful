@@ -1,5 +1,6 @@
 package com.biztech.demo.apicontroller;
 
+import com.biztech.demo.constants.GlobalConstant;
 import com.biztech.demo.model.MemberModel;
 import com.biztech.demo.object.*;
 import com.biztech.demo.service.MemberService;
@@ -32,7 +33,8 @@ public class MemberController {
 
     @ApiOperation(value = "Create New Member", notes = "Create New Member With Member userId, name, surname and insert activity logs by activity")
     @ApiResponses(value = {
-        @ApiResponse(code = 500, message = "Internal Server Error", response = CreateMemberResponseObject.class),
+            @ApiResponse(code = 201, message = "Created Successful", response = CreateMemberResponseObject.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = CreateMemberResponseObject.class),
     })
     @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CreateMemberResponseObject> createMember(
@@ -49,13 +51,14 @@ public class MemberController {
             responseObject = (CreateMemberResponseObject) StringUtil.copy(member, new CreateMemberResponseObject());
             responseObject.setResponseCode("0000I");
             responseObject.setResponseDesc("SUCCESS");
-            return new ResponseEntity<>(responseObject, HttpStatus.OK);
+            return new ResponseEntity<>(responseObject, HttpStatus.CREATED);
         } catch (BiztechException bx) {
 
             logger.error(bx.getExceptionCode()+" : "+ bx.getExceptionMessage());
-            logger.error("Error ", bx);
+            logger.error("Error ", bx.getException());
             responseObject.setResponseCode(bx.getExceptionCode());
             responseObject.setResponseDesc(bx.getExceptionMessage());
+            responseObject.setExceptionProject(bx.getExceptionProject());
             return new ResponseEntity<>(responseObject, bx.getHttpStatus());
         } catch (Exception e) {
 
@@ -63,12 +66,14 @@ public class MemberController {
             logger.error("Error ", e);
             responseObject.setResponseCode("9999E");
             responseObject.setResponseDesc("Other Error Exception "+ e.getMessage());
+            responseObject.setExceptionProject(GlobalConstant.PROJECT_NAME);
             return new ResponseEntity<>(responseObject, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @ApiOperation(value = "Update Member Data", notes = "Update Member With Member id, userId, name, surname and insert activity logs by activity", response = UpdateMemberResponseObject.class)
     @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Updates Successful", response = UpdateMemberResponseObject.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = UpdateMemberRequestObject.class)
     })
     @RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -89,9 +94,10 @@ public class MemberController {
         } catch (BiztechException bx) {
 
             logger.error(bx.getExceptionCode()+" : "+ bx.getExceptionMessage());
-            logger.error("Error ", bx);
+            logger.error("Error ", bx.getException());
             responseObject.setResponseCode(bx.getExceptionCode());
             responseObject.setResponseDesc(bx.getExceptionMessage());
+            responseObject.setExceptionProject(bx.getExceptionProject());
             return new ResponseEntity<>(responseObject, bx.getHttpStatus());
         } catch (Exception e) {
 
@@ -99,6 +105,7 @@ public class MemberController {
             logger.error("Error ", e);
             responseObject.setResponseCode("9999E");
             responseObject.setResponseDesc("Other Error Exception "+ e.getMessage());
+            responseObject.setExceptionProject(GlobalConstant.PROJECT_NAME);
             return new ResponseEntity<>(responseObject, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -115,9 +122,8 @@ public class MemberController {
                             }))
     })
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Created Successful", response = ResponseObject.class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseObject.class),
-            @ApiResponse(code = 400, message = "Parameter not found", response = ResponseObject.class)
+            @ApiResponse(code = 200, message = "Deleted Successful", response = ResponseObject.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseObject.class)
     })
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseObject> deleteMember(
@@ -137,9 +143,10 @@ public class MemberController {
         } catch (BiztechException bx) {
 
             logger.error(bx.getExceptionCode()+" : "+ bx.getExceptionMessage());
-            logger.error("Error ", bx);
+            logger.error("Error ", bx.getException());
             responseObject.setResponseCode(bx.getExceptionCode());
             responseObject.setResponseDesc(bx.getExceptionMessage());
+            responseObject.setExceptionProject(bx.getExceptionProject());
             return new ResponseEntity<>(responseObject, bx.getHttpStatus());
         } catch (Exception e) {
 
@@ -147,6 +154,7 @@ public class MemberController {
             logger.error("Error ", e);
             responseObject.setResponseCode("9999E");
             responseObject.setResponseDesc("Other Error Exception "+ e.getMessage());
+            responseObject.setExceptionProject(GlobalConstant.PROJECT_NAME);
             return new ResponseEntity<>(responseObject, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -163,9 +171,8 @@ public class MemberController {
                             }))
     })
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Created Successful", response = ResponseObject.class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseObject.class),
-            @ApiResponse(code = 400, message = "Parameter not found", response = ResponseObject.class)
+            @ApiResponse(code = 200, message = "Find all Successful", response = ResponseObject.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseObject.class)
     })
     @RequestMapping(value = "/findAll", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseObject> findAllMember(
@@ -185,9 +192,10 @@ public class MemberController {
         } catch (BiztechException bx) {
 
             logger.error(bx.getExceptionCode()+" : "+ bx.getExceptionMessage());
-            logger.error("Error ", bx);
+            logger.error("Error ", bx.getException());
             responseObject.setResponseCode(bx.getExceptionCode());
             responseObject.setResponseDesc(bx.getExceptionMessage());
+            responseObject.setExceptionProject(bx.getExceptionProject());
             return new ResponseEntity<>(responseObject, bx.getHttpStatus());
         } catch (Exception e) {
 
@@ -195,6 +203,7 @@ public class MemberController {
             logger.error("Error ", e);
             responseObject.setResponseCode("9999E");
             responseObject.setResponseDesc("Other Error Exception "+ e.getMessage());
+            responseObject.setExceptionProject(GlobalConstant.PROJECT_NAME);
             return new ResponseEntity<>(responseObject, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -211,9 +220,8 @@ public class MemberController {
                             }))
     })
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Created Successful", response = ResponseObject.class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseObject.class),
-            @ApiResponse(code = 400, message = "Parameter not found", response = ResponseObject.class)
+            @ApiResponse(code = 200, message = "Find by name Successful", response = ResponseObject.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseObject.class)
     })
     @RequestMapping(value = "/findByName", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseObject> findByNameMember(
@@ -233,9 +241,10 @@ public class MemberController {
         } catch (BiztechException bx) {
 
             logger.error(bx.getExceptionCode()+" : "+ bx.getExceptionMessage());
-            logger.error("Error ", bx);
+            logger.error("Error ", bx.getException());
             responseObject.setResponseCode(bx.getExceptionCode());
             responseObject.setResponseDesc(bx.getExceptionMessage());
+            responseObject.setExceptionProject(bx.getExceptionProject());
             return new ResponseEntity<>(responseObject, bx.getHttpStatus());
         } catch (Exception e) {
 
@@ -243,6 +252,7 @@ public class MemberController {
             logger.error("Error ", e);
             responseObject.setResponseCode("9999E");
             responseObject.setResponseDesc("Other Error Exception "+ e.getMessage());
+            responseObject.setExceptionProject(GlobalConstant.PROJECT_NAME);
             return new ResponseEntity<>(responseObject, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -259,9 +269,8 @@ public class MemberController {
                             }))
     })
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Created Successful", response = ResponseObject.class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseObject.class),
-            @ApiResponse(code = 400, message = "Parameter not found", response = ResponseObject.class)
+            @ApiResponse(code = 200, message = "Find by surname Successful", response = ResponseObject.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseObject.class)
     })
     @RequestMapping(value = "/findBySurname", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseObject> findBySurnameMember(
@@ -281,9 +290,10 @@ public class MemberController {
         } catch (BiztechException bx) {
 
             logger.error(bx.getExceptionCode()+" : "+ bx.getExceptionMessage());
-            logger.error("Error ", bx);
+            logger.error("Error ", bx.getException());
             responseObject.setResponseCode(bx.getExceptionCode());
             responseObject.setResponseDesc(bx.getExceptionMessage());
+            responseObject.setExceptionProject(bx.getExceptionProject());
             return new ResponseEntity<>(responseObject, bx.getHttpStatus());
         } catch (Exception e) {
 
@@ -291,6 +301,7 @@ public class MemberController {
             logger.error("Error ", e);
             responseObject.setResponseCode("9999E");
             responseObject.setResponseDesc("Other Error Exception "+ e.getMessage());
+            responseObject.setExceptionProject(GlobalConstant.PROJECT_NAME);
             return new ResponseEntity<>(responseObject, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -307,9 +318,8 @@ public class MemberController {
                             }))
     })
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Created Successful", response = ResponseObject.class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseObject.class),
-            @ApiResponse(code = 400, message = "Parameter not found", response = ResponseObject.class)
+            @ApiResponse(code = 200, message = "Find by id Successful", response = ResponseObject.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = ResponseObject.class)
     })
     @RequestMapping(value = "/findById", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseObject> findById(
@@ -329,9 +339,10 @@ public class MemberController {
         } catch (BiztechException bx) {
 
             logger.error(bx.getExceptionCode()+" : "+ bx.getExceptionMessage());
-            logger.error("Error ", bx);
+            logger.error("Error ", bx.getException());
             responseObject.setResponseCode(bx.getExceptionCode());
             responseObject.setResponseDesc(bx.getExceptionMessage());
+            responseObject.setExceptionProject(bx.getExceptionProject());
             return new ResponseEntity<>(responseObject, bx.getHttpStatus());
         } catch (Exception e) {
 
@@ -339,6 +350,7 @@ public class MemberController {
             logger.error("Error ", e);
             responseObject.setResponseCode("9999E");
             responseObject.setResponseDesc("Other Error Exception "+ e.getMessage());
+            responseObject.setExceptionProject(GlobalConstant.PROJECT_NAME);
             return new ResponseEntity<>(responseObject, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

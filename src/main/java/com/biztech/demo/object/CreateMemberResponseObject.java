@@ -10,14 +10,6 @@ import java.util.Date;
 @ApiModel(description = "Class response of create member service")
 public class CreateMemberResponseObject extends CommonResponseObject {
 
-//    @JsonProperty(required = true)
-//    @ApiModelProperty(notes = "Response code of this request", required = true)
-//    private String responseCode;
-//
-//    @JsonProperty(required = true)
-//    @ApiModelProperty(notes = "Response detail of this request", required = true)
-//    private String responseDesc;
-
     @JsonProperty(required = true)
     @ApiModelProperty(notes = "id")
     private int id;

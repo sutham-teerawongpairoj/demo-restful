@@ -1,40 +1,34 @@
 package com.biztech.demo.util;
 
+import com.biztech.demo.constants.GlobalConstant;
 import org.springframework.http.HttpStatus;
 
 public class BiztechException extends RuntimeException {
 
+    private String exceptionProject;
     private String exceptionCode;
     private String exceptionMessage;
     private HttpStatus httpStatus;
-    private Throwable cause;
+    private Exception exception;
+
 
     public BiztechException(){}
 
-//    public BiztechException(String exceptionCode, String exceptionMessage, HttpStatus httpStatus) {
-//        this.exceptionCode = exceptionCode;
-//        this.exceptionMessage = exceptionMessage;
-//        this.httpStatus = httpStatus;
-//    }
-//
-//    public BiztechException(String exceptionCode, String exceptionMessage, HttpStatus httpStatus, Throwable cause) {
-//        this.exceptionCode = exceptionCode;
-//        this.exceptionMessage = exceptionMessage;
-//        this.httpStatus = httpStatus;
-//        this.cause = cause;
-//    }
 
-    public BiztechException(String exceptionCode, String exceptionMessage) {
+    public BiztechException(String exceptionProject, String exceptionCode, String exceptionMessage, Exception exception) {
+        this.exceptionProject = exceptionProject;
         this.exceptionCode = exceptionCode;
         this.exceptionMessage = exceptionMessage;
         this.httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        this.exception = exception;
     }
 
-    public BiztechException(String exceptionCode, String exceptionMessage, Throwable cause) {
+    public BiztechException(String exceptionProject, String exceptionCode, String exceptionMessage, Exception exception, String pName, String pValue) {
+        this.exceptionProject = exceptionProject;
         this.exceptionCode = exceptionCode;
-        this.exceptionMessage = exceptionMessage;
+        this.exceptionMessage = exceptionMessage.replaceAll(GlobalConstant.PARMATER_NOT_FOUND_P_NAME, pName).replaceAll(GlobalConstant.PARMATER_NOT_FOUND_P_VALUE, pValue);
         this.httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        this.cause = cause;
+        this.exception = exception;
     }
 
     public String getExceptionCode() {
@@ -53,20 +47,27 @@ public class BiztechException extends RuntimeException {
         this.exceptionMessage = exceptionMessage;
     }
 
-    @Override
-    public Throwable getCause() {
-        return cause;
-    }
-
-    public void setCause(Throwable cause) {
-        this.cause = cause;
-    }
-
     public HttpStatus getHttpStatus() {
         return httpStatus;
     }
 
     public void setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
+    }
+
+    public String getExceptionProject() {
+        return exceptionProject;
+    }
+
+    public void setExceptionProject(String exceptionProject) {
+        this.exceptionProject = exceptionProject;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
+
+    public void setException(Exception exception) {
+        this.exception = exception;
     }
 }

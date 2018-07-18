@@ -15,6 +15,10 @@ public class CommonResponseObject {
     @ApiModelProperty(notes = "Response detail of this request", required = true)
     private String responseDesc;
 
+    @JsonProperty(required = true)
+    @ApiModelProperty(notes = "Response project exception")
+    private String exceptionProject;
+
     public String getResponseCode() {
         return responseCode;
     }
@@ -29,5 +33,13 @@ public class CommonResponseObject {
 
     public void setResponseDesc(String responseDesc) {
         this.responseDesc = responseDesc;
+    }
+
+    public String getExceptionProject() {
+        return exceptionProject;
+    }
+
+    public void setExceptionProject(String exceptionProject) {
+        this.exceptionProject = exceptionProject;
     }
 }
