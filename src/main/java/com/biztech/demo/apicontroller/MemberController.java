@@ -36,7 +36,7 @@ public class MemberController {
             @ApiResponse(code = 201, message = "Created Successful", response = CreateMemberResponseObject.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = CreateMemberResponseObject.class),
     })
-    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<CreateMemberResponseObject> createMember(
             @RequestBody CreateMemberRequestObject requestObject) {
 
