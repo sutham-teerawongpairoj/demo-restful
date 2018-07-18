@@ -10,6 +10,12 @@ buildscript {
     }
 }
 
+processResources {
+    filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+            activeProfiles: activeProfiles
+    ]
+}
+
 apply plugin: 'idea'
 apply plugin: 'war'
 //apply plugin: 'java'
