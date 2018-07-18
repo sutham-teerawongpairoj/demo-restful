@@ -76,7 +76,7 @@ public class MemberController {
             @ApiResponse(code = 200, message = "Updates Successful", response = UpdateMemberResponseObject.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = UpdateMemberRequestObject.class)
     })
-    @RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UpdateMemberResponseObject> updateMember(
             @RequestBody UpdateMemberRequestObject requestObject) {
 
