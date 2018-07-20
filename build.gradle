@@ -25,7 +25,7 @@ repositories {
 processResources {
     if (project.hasProperty('profile')) {
 
-        println project.profile
+        println "USE PROFILE " + project.profile
 
         def profile = project.profile.toLowerCase()
         include "**/application-${profile}.properties"
