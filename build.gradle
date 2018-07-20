@@ -22,6 +22,15 @@ repositories {
     mavenCentral()
 }
 
+processResources {
+    def profile = (project.hasProperty('profile') ? project.profile : 'sit').toLowerCase()
+    include "**/application_${profile}.properties"
+    rename {
+        'application.properties'
+    }
+}
+
+
 dependencies {
     compile ('org.springframework.boot:spring-boot-starter-web:2.0.1.RELEASE') {
         exclude module: 'spring-boot-starter-logging'
