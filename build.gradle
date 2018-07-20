@@ -23,7 +23,7 @@ repositories {
 }
 
 processResources {
-    def profile = (project.hasProperty('profile') ? project.profile : 'sit').toLowerCase()
+    def profile = (project.hasProperty('profile') && !project.profile.equals('') ? project.profile : 'sit').toLowerCase()
     include "**/application-${profile}.properties"
     rename {
         'application.properties'
